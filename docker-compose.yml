@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:16.2-bullseye
+    restart: always
+    environment:
+      POSTGRES_USER: api
+      POSTGRES_PASSWORD: p@ssw0rd
+      POSTGRES_DB: project-board
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./data:/var/lib/postgresql/data

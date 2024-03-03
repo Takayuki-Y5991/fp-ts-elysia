@@ -2,11 +2,26 @@
   "name": "api",
   "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "test": "bun test test/**/*.ts",
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build src/index.ts",
+    "format:check": "prettier --check src/**/*.ts",
+    "format:fix": "prettier --write .",
+    "prisma:mi": "bunx prisma migrate dev --name init",
+    "prisma:m": "bunx prisma migrate dev",
+    "prisma:g": "bunx prisma generate",
+    "prisma:s": "bunx prisma studio"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@elysiajs/swagger": "^0.8.5",
+    "@prisma/client": "^5.10.2",
+    "elysia": "latest",
+    "fp-ts": "^2.16.2",
+    "pg-mem": "^2.8.1",
+    "pino": "^8.19.0",
+    "prettier": "^3.2.5",
+    "prisma": "^5.10.2",
+    "ulid": "^2.3.0"
   },
   "devDependencies": {
     "bun-types": "latest"
