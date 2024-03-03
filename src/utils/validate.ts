@@ -27,18 +27,23 @@ const validate = <E, A>(value: A, ...validators: Validation<E, A>[]): TaskEither
 
 export { Validation, validate };
 
+type ErrorType = 'INVALID ERROR' | 'AUTHENTICATION ERROR' | 'INTERNAL SERVER ERROR' | 'DATABASE ERROR';
+
 interface LogicalError {
   message: string;
+  status: ErrorType;
 }
 
-const withLoggingAndCatch = <A>(operation: () => Promise<A>, errorMessage: string): TaskEither<LogicalError, A> => {
+const withLoggingAndCatch = <A>(operation: () => Promise<A>, errorType: ErrorType, errorMessage: string): TaskEither<LogicalError, A> => {
   return tryCatch(
     () => {
       return operation();
     },
     (error: unknown): LogicalError => {
+      console.log(`${error}`);
       logger.error(`operation failed`, error);
-      return { message: errorMessage };
+      logger.error(`Cause of error ${errorMessage}`);
+      return { message: errorMessage, status: errorType };
     },
   );
 };

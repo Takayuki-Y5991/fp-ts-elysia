@@ -1,11 +1,7 @@
 import { Elysia, Static, t } from 'elysia';
 import { Priority } from '../types/unionType';
 
-const priority = t.Union([
-  t.Literal(Priority.LOW),
-  t.Literal(Priority.HIGH),
-  t.Literal(Priority.MEDIUM),
-]);
+const priority = t.Union([t.Literal(Priority.LOW), t.Literal(Priority.HIGH), t.Literal(Priority.MEDIUM)]);
 
 const task = t.Object({
   id: t.String({

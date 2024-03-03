@@ -1,5 +1,4 @@
 import { Elysia, Static, t } from 'elysia';
-import { AccountRepository } from './account.repository';
 
 const account = t.Object({
   id: t.String(),
@@ -10,7 +9,7 @@ const account = t.Object({
   password: t.String({
     maxLength: 100,
     minLength: 8,
-    pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[W_]).+$',
+    // pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[W_]).+$',
   }),
 });
 
@@ -20,7 +19,12 @@ const createRequest = t.Omit(account, ['id']);
 
 export type AccountCreateRequest = Static<typeof createRequest>;
 
-export const authModel = new Elysia().model({
-  'auth.account': account,
-  'auth.createAccount': createRequest,
+const loginRequest = t.Omit(account, ['id', 'name']);
+
+export type LoginRequest = Static<typeof loginRequest>;
+
+export const accountModel = new Elysia().model({
+  'account.account': account,
+  'account.createAccount': createRequest,
+  'account.login': loginRequest,
 });

@@ -5,6 +5,7 @@ import { PrismaTaskRepository } from './repository/task.repository';
 import { PrismaClient } from '@prisma/client';
 import prisma from './plugins/config/prisma.plugin';
 import { setup } from './setup';
+import { accountModel } from './plugins/account/account.model';
 
 export const app = new Elysia()
   .trace(async ({ handle }) => {
@@ -13,6 +14,7 @@ export const app = new Elysia()
   })
   .use(swagger())
   .use(taskModel)
+  .use(accountModel)
   .use(setup)
   .post(
     '/test',
@@ -31,6 +33,15 @@ export const app = new Elysia()
   .get('/task', ({ taskRepository }) => {
     return taskRepository.fetchAll();
   })
+  .post(
+    '/accounts',
+    ({ prisma, accountRepository, accountService, body }) => {
+      return accountService.create(body, accountRepository, prisma);
+    },
+    {
+      body: 'account.createAccount',
+    },
+  )
   // .get('/', () => 'Hello Elysia')
   // .get('/id/:id', ({ params: { id } }) => id, {
   //   params: t.Object({
@@ -45,6 +56,4 @@ export const app = new Elysia()
   })
   .listen(3000);
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
-);
+console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
