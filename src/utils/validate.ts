@@ -1,5 +1,5 @@
 import { either } from 'fp-ts';
-import { fold } from 'fp-ts/Either';
+import { Either, fold } from 'fp-ts/Either';
 import { TaskEither, right, left, tryCatch } from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 import { logger } from './logger';
@@ -8,17 +8,15 @@ import { ErrorType, LogicalError } from '../types/errorTypes';
 type Validation<E, A> = (value: A) => either.Either<E, A>;
 
 const validate = <E, A>(value: A, ...validators: Validation<E, A>[]): TaskEither<E, A> => {
-  const applyValidators = (currentValue: A): either.Either<E, A> => {
-    for (let validator of validators) {
-      const result = validator(currentValue);
-      if (either.isLeft(result)) {
-        return result;
-      }
-    }
-    return either.right(currentValue);
+  const validateInternal = (acc: Either<E, A>, validators: Validation<E, A>[]): Either<E, A> => {
+    if (validators.length === 0) return acc;
+
+    const [head, ...tail] = validators;
+    return either.chain(head)(acc) as Either<E, A>; // Assertionが必要かも
   };
+
   return pipe(
-    applyValidators(value),
+    validateInternal(either.right(value), validators),
     fold(
       (e) => left(e),
       (a) => right(a),

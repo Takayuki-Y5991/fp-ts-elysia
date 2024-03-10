@@ -1,0 +1,21 @@
+name: testing
+
+on:
+  pull_request:
+    branches: ['main', 'develop']
+
+jobs:
+  unit-testing:
+    name: unit-testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+      - name: Run install Bun.js
+        run: bun install
+
+      - name: Unit test
+        run: bun test
