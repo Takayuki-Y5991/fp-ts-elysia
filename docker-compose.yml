@@ -1,5 +1,23 @@
 version: '3.8'
 services:
+  app:
+    build:
+      context: .
+    depends_on:
+      - db
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=postgresql://api:p@ssw0rd@db:5432/project-board
+    volumes:
+      - ./src:/app/src # srcディレクトリの変更をリアルタイムで反映
+      - ./prisma:/app/prisma # prismaディレクトリの変更をリアルタイムで反映
+      - ./package.json:/app/package.json # package.jsonの変更を反映
+      - ./tsconfig.json:/app/tsconfig.json # tsconfig.jsonの変更を反映
+      - ./bun.lockb:/app/bun.lockb # bun.lockbの変更を反映
+      - /app/node_modules # node_modulesディレクトリをコンテナに固定
+    networks:
+      - project-board
   db:
     image: postgres:16.2-bullseye
     restart: always
@@ -11,3 +29,8 @@ services:
       - '5432:5432'
     volumes:
       - ./data:/var/lib/postgresql/data
+    networks:
+      - project-board
+networks:
+  project-board:
+    driver: bridge

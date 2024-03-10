@@ -13,6 +13,7 @@
     "prisma:s": "bunx prisma studio"
   },
   "dependencies": {
+    "@elysiajs/eden": "^0.8.1",
     "@elysiajs/swagger": "^0.8.5",
     "@prisma/client": "^5.10.2",
     "elysia": "latest",

@@ -23,7 +23,7 @@ export const AccountRepository: IAccountRepository = {
       },
     });
   },
-  create(account: Omit<Account, 'id'>, tx: Prisma.TransactionClient): Promise<Account> {
+  create: async (account: Omit<Account, 'id'>, tx: Prisma.TransactionClient): Promise<Account> => {
     return tx.account.create({
       data: account,
     });

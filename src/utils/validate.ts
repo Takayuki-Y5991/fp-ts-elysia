@@ -3,6 +3,8 @@ import { fold } from 'fp-ts/Either';
 import { TaskEither, right, left, tryCatch } from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
 import { logger } from './logger';
+import { ErrorType, LogicalError } from '../types/errorTypes';
+import { ResponseType as Response } from '../types/globalTypes';
 
 type Validation<E, A> = (value: A) => either.Either<E, A>;
 
@@ -27,13 +29,6 @@ const validate = <E, A>(value: A, ...validators: Validation<E, A>[]): TaskEither
 
 export { Validation, validate };
 
-type ErrorType = 'INVALID ERROR' | 'AUTHENTICATION ERROR' | 'INTERNAL SERVER ERROR' | 'DATABASE ERROR';
-
-interface LogicalError {
-  message: string;
-  status: ErrorType;
-}
-
 const withLoggingAndCatch = <A>(operation: () => Promise<A>, errorType: ErrorType, errorMessage: string): TaskEither<LogicalError, A> => {
   return tryCatch(
     () => {
@@ -48,4 +43,4 @@ const withLoggingAndCatch = <A>(operation: () => Promise<A>, errorType: ErrorTyp
   );
 };
 
-export { withLoggingAndCatch, LogicalError };
+export { withLoggingAndCatch };

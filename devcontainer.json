@@ -1,0 +1,30 @@
+{
+  "name": "My Bun.js App",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/app",
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "prisma.prisma", "ms-vscode.vscode-typescript-next"]
+    },
+    "settings": {
+      "terminal.integrated.shell.linux": "/bin/bash",
+      "[typescript]": {
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+        },
+        "editor.formatOnSave": true
+      },
+      "[typescriptreact]": {
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+        },
+        "editor.formatOnSave": true
+      }
+    }
+  },
+
+  "forwardPorts": [3000, 5432],
+  "postCreateCommand": "bun install",
+  "shutdownAction": "stopCompose"
+}
