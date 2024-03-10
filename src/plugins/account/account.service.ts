@@ -7,24 +7,24 @@ import { withLoggingAndCatch } from '../../utils/validate';
 import { LogicalError } from '../../types/errorTypes';
 import { Account, OmitAccount } from './account.model';
 
-const findByEmailTE = (
+export const findByEmailTE = (
   email: string,
   repository: IAccountRepository,
   tx: Prisma.TransactionClient,
 ): TaskEither<LogicalError, Account | null> =>
   withLoggingAndCatch(() => repository.findByEmail(email, tx), 'DATABASE_ERROR', 'Email already exists in the database.');
 
-const createAccountTE = (
+export const createAccountTE = (
   account: Omit<Account, 'id'> & { password: string },
   repository: IAccountRepository,
   tx: Prisma.TransactionClient,
 ): TaskEither<LogicalError, Account> =>
   withLoggingAndCatch(() => repository.create(account, tx), 'DATABASE_ERROR', 'Failed to create account.');
 
-const hashPasswordTE = (password: string): TaskEither<LogicalError, string> =>
+export const hashPasswordTE = (password: string): TaskEither<LogicalError, string> =>
   withLoggingAndCatch(() => hashPassword(password), 'INVALID_ERROR', 'Password hashing failed.');
 
-const verifyPasswordTE = (password: string, user: Account): TaskEither<LogicalError, Account> =>
+export const verifyPasswordTE = (password: string, user: Account): TaskEither<LogicalError, Account> =>
   withLoggingAndCatch(
     async () => {
       const isPasswordValid = await verifyPassword(password, user.password);
@@ -35,7 +35,7 @@ const verifyPasswordTE = (password: string, user: Account): TaskEither<LogicalEr
     'Password verification failed',
   );
 
-const generateToken = (account: Account): TaskEither<LogicalError, string> =>
+export const generateToken = (account: Account): TaskEither<LogicalError, string> =>
   withLoggingAndCatch(
     async () => {
       // FIXME: TOKEN GENERATE
