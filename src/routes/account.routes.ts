@@ -1,7 +1,6 @@
-import { Elysia, error, t } from 'elysia';
+import { Elysia } from 'elysia';
 import { accountSetUp, globalSetup } from '../setup';
 import { handleTE } from '../utils/handler';
-import { Account, OmitAccount } from '../plugins/account/account.model';
 
 export const accountRoutes = new Elysia({ prefix: '/accounts' })
   .use(globalSetup)

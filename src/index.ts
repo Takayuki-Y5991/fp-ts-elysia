@@ -1,8 +1,6 @@
 import swagger from '@elysiajs/swagger';
 import { Elysia, t } from 'elysia';
-import prisma, { withTransaction } from './plugins/config/prisma.plugin';
 import { errorHandler, globalSetup } from './setup';
-import { accountModel } from './plugins/account/account.model';
 import { routes } from './routes/index.routes';
 
 export const app = new Elysia()
