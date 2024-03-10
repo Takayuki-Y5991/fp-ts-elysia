@@ -12,7 +12,7 @@ const validate = <E, A>(value: A, ...validators: Validation<E, A>[]): TaskEither
     if (validators.length === 0) return acc;
 
     const [head, ...tail] = validators;
-    return either.chain(head)(acc) as Either<E, A>; // Assertionが必要かも
+    return either.chain(head)(acc) as Either<E, A>;
   };
 
   return pipe(

@@ -18,10 +18,9 @@ const toResponseStatus = ({ status, message }: { status: ErrorType; message: str
       return error('Bad Request', message);
     case 'AUTHENTICATION_ERROR':
       return error('Forbidden', message);
-    case 'DATABASE_ERROR' || 'INTERNAL_SERVER_ERROR':
+    case 'DATABASE_ERROR':
+    case 'INTERNAL_SERVER_ERROR':
       return error('Internal Server Error', message);
-    default:
-      return new Error('No implement......');
   }
 };
 
