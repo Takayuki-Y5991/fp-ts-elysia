@@ -1,25 +1,36 @@
 import { IAccountRepository } from './account.repository';
-import { Prisma } from '@prisma/client';
 import { pipe } from 'fp-ts/function';
 import { TaskEither, chain, right as rightTE, left as leftTE } from 'fp-ts/TaskEither';
 import { hashPassword, verifyPassword } from '../../utils/password';
 import { withLoggingAndCatch } from '../../utils/validate';
 import { LogicalError } from '../../types/errorTypes';
-import { Account, OmitAccount } from './account.model';
+import { PgTransactionT } from '../../types/configTypes';
 
-export const findByEmailTE = (
-  email: string,
-  repository: IAccountRepository,
-  tx: Prisma.TransactionClient,
-): TaskEither<LogicalError, Account | null> =>
+interface Account {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: 'admin' | 'customer';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface CreateAccount {
+  role?: 'admin' | 'customer';
+  password: string;
+  name: string;
+  email: string;
+}
+
+export const findByEmailTE = (email: string, repository: IAccountRepository, tx: PgTransactionT): TaskEither<LogicalError, Account> =>
   withLoggingAndCatch(() => repository.findByEmail(email, tx), 'DATABASE_ERROR', 'Email already exists in the database.');
 
 export const createAccountTE = (
-  account: Omit<Account, 'id'> & { password: string },
+  account: CreateAccount & { password: string },
   repository: IAccountRepository,
-  tx: Prisma.TransactionClient,
-): TaskEither<LogicalError, Account> =>
-  withLoggingAndCatch(() => repository.create(account, tx), 'DATABASE_ERROR', 'Failed to create account.');
+  tx: PgTransactionT,
+): TaskEither<LogicalError, Account> => withLoggingAndCatch(() => repository.create(account, tx), 'DATABASE_ERROR', 'Failed to create account.');
 
 export const hashPasswordTE = (password: string): TaskEither<LogicalError, string> =>
   withLoggingAndCatch(() => hashPassword(password), 'INVALID_ERROR', 'Password hashing failed.');
@@ -47,24 +58,16 @@ export const generateToken = (account: Account): TaskEither<LogicalError, string
   );
 
 export interface IAccountService {
-  create(
-    params: Omit<Account, 'id'>,
-    repository: IAccountRepository,
-    tx: Prisma.TransactionClient,
-  ): Promise<TaskEither<LogicalError, OmitAccount>>;
-  login(
-    params: { email: string; password: string },
-    repository: IAccountRepository,
-    tx: Prisma.TransactionClient,
-  ): Promise<TaskEither<LogicalError, string>>;
+  create(params: CreateAccount, repository: IAccountRepository, tx: PgTransactionT): Promise<TaskEither<LogicalError, Omit<Account, 'password'>>>;
+  login(params: { email: string; password: string }, repository: IAccountRepository, tx: PgTransactionT): Promise<TaskEither<LogicalError, string>>;
 }
 
 export const AccountService: IAccountService = {
   create: async (
-    params: Omit<Account, 'id'>,
+    params: CreateAccount,
     repository: IAccountRepository,
-    tx: Prisma.TransactionClient,
-  ): Promise<TaskEither<LogicalError, OmitAccount>> => {
+    tx: PgTransactionT,
+  ): Promise<TaskEither<LogicalError, Omit<Account, 'password'>>> => {
     return pipe(
       findByEmailTE(params.email, repository, tx),
       chain((existingAccount) =>
@@ -77,14 +80,12 @@ export const AccountService: IAccountService = {
   login: async (
     params: { email: string; password: string },
     repository: IAccountRepository,
-    tx: Prisma.TransactionClient,
+    tx: PgTransactionT,
   ): Promise<TaskEither<LogicalError, string>> => {
     return pipe(
       findByEmailTE(params.email, repository, tx),
       chain((account) =>
-        account
-          ? verifyPasswordTE(params.password, account)
-          : leftTE<LogicalError>({ message: 'Account not found.', status: 'INVALID_ERROR' }),
+        account ? verifyPasswordTE(params.password, account) : leftTE<LogicalError>({ message: 'Account not found.', status: 'INVALID_ERROR' }),
       ),
       chain((account) => generateToken(account)),
     );

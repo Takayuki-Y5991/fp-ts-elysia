@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'bun:test';
-import { Validation, validate, withLoggingAndCatch } from '../../src/utils/validate';
+import { Validation, validate, withLoggingAndCatch } from '../../../src/utils/validate';
 import { either } from 'fp-ts';
 
 const isString: Validation<string, any> = (value) => (typeof value === 'string' ? either.right(value) : either.left('Not a string'));
