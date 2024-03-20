@@ -8,8 +8,8 @@ export const account = pgTable('account', {
   email: varchar('email').notNull().unique(),
   password: varchar('password').notNull(),
   role: role('role').notNull().default('customer'),
-  createdAt: timestamp('created_at').notNull().default(new Date()),
-  updatedAt: timestamp('updated_at').notNull().default(new Date()),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
 export type Account = typeof account.$inferSelect;
