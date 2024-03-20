@@ -1,31 +1,35 @@
-import { Account, Prisma } from '@prisma/client';
+import { PgTransactionT } from '../../types/configTypes';
+import { account } from '../../schema';
+import { eq } from 'drizzle-orm';
+import { head } from '../../utils/function';
+import { CreateAccount } from './account.model';
+
+interface IAccount {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: 'admin' | 'customer';
+  createdAt: Date;
+  updatedAt: Date;
+}
+interface ICreateAccount {
+  role?: 'admin' | 'customer' | undefined;
+  name: string;
+  email: string;
+  password: string;
+}
 
 export interface IAccountRepository {
-  findByUserName(username: string, tx: Prisma.TransactionClient): Promise<Account[] | []>;
-  findByEmail(email: string, tx: Prisma.TransactionClient): Promise<Account | null>;
-  create(account: Omit<Account, 'id'>, tx: Prisma.TransactionClient): Promise<Account>;
+  findByEmail(email: string, tx: PgTransactionT): Promise<IAccount>;
+  findById(id: string, tx: PgTransactionT): Promise<IAccount>;
+  findByRole(role: 'admin' | 'customer', tx: PgTransactionT): Promise<IAccount[]>;
+  create(account: ICreateAccount, tx: PgTransactionT): Promise<IAccount>;
 }
 
 export const AccountRepository: IAccountRepository = {
-  findByUserName: async (username: string, tx: Prisma.TransactionClient): Promise<Account[] | []> => {
-    return tx.account.findMany({
-      where: {
-        name: {
-          contains: username,
-        },
-      },
-    });
-  },
-  findByEmail: async (email: string, tx: Prisma.TransactionClient): Promise<Account | null> => {
-    return tx.account.findFirst({
-      where: {
-        email: email,
-      },
-    });
-  },
-  create: async (account: Omit<Account, 'id'>, tx: Prisma.TransactionClient): Promise<Account> => {
-    return tx.account.create({
-      data: account,
-    });
-  },
+  findByEmail: async (email: string, tx: PgTransactionT): Promise<IAccount> => tx.select().from(account).where(eq(account.email, email)).then(head),
+  findById: async (id: string, tx: PgTransactionT): Promise<IAccount> => tx.select().from(account).where(eq(account.id, id)).then(head),
+  findByRole: async (role: 'admin' | 'customer', tx: PgTransactionT): Promise<IAccount[]> => tx.select().from(account).where(eq(account.role, role)),
+  create: async (entity: CreateAccount, tx: PgTransactionT): Promise<IAccount> => tx.insert(account).values(entity).returning().then(head),
 };

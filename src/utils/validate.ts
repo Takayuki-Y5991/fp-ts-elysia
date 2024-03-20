@@ -2,7 +2,7 @@ import { either } from 'fp-ts';
 import { Either, fold } from 'fp-ts/Either';
 import { TaskEither, right, left, tryCatch } from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/function';
-import { logger } from './logger';
+import { logger } from '../plugins/config/logger.plugin';
 import { ErrorType, LogicalError } from '../types/errorTypes';
 
 type Validation<E, A> = (value: A) => either.Either<E, A>;

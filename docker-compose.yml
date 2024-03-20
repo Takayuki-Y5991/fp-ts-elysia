@@ -31,6 +31,17 @@ services:
       - ./data:/var/lib/postgresql/data
     networks:
       - project-board
+  test-db:
+    image: postgres:16.2-bullseye
+    restart: always
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: p@ssw0rd
+      POSTGRES_DB: test-project-board
+    ports:
+      - '9000:9000'
+    networks:
+      - project-board
 networks:
   project-board:
     driver: bridge

@@ -19,23 +19,30 @@ const account = t.Object({
     default: crypto.randomUUID(),
     error: 'Password must 8 to 100 count',
   }),
+  role: t.Union([t.Literal('admin', { description: 'admin grant' }), t.Literal('customer', { description: 'customer grant' })], {
+    default: 'customer',
+    error: 'role choose one , admin or customer',
+  }),
+  createdAt: t.Date({ default: new Date() }),
+  updatedAt: t.Date({ default: new Date() }),
 });
 
+/** Basic Model */
 export type Account = Static<typeof account>;
 
-const createRequest = t.Omit(account, ['id']);
+const OIdCreatedAtUpdatedAtAccount = t.Omit(account, ['id', 'createdAt', 'updatedAt']);
+const OPIdCreatedAtUpdatedAtAccount = t.Composite([
+  t.Omit(OIdCreatedAtUpdatedAtAccount, ['role']),
+  t.Partial(t.Pick(OIdCreatedAtUpdatedAtAccount, ['role']), ['role']),
+]);
 
-const returnAccount = t.Omit(account, ['password']);
+export type CreateAccount = Static<typeof OPIdCreatedAtUpdatedAtAccount>;
 
-export type OmitAccount = Static<typeof returnAccount>;
+const OPasswordAccount = t.Omit(account, ['password']);
 
-const loginRequest = t.Omit(account, ['id', 'name']);
-
-export type LoginRequest = Static<typeof loginRequest>;
+export type OmitAccount = Static<typeof OPasswordAccount>;
 
 export const accountModel = new Elysia().model({
-  account: account,
-  createAccount: createRequest,
-  returnAccount: returnAccount,
-  login: loginRequest,
+  'account.create': OPIdCreatedAtUpdatedAtAccount,
+  'account.return': OPasswordAccount,
 });

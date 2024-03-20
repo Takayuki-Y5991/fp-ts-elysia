@@ -2,31 +2,37 @@
   "name": "api",
   "version": "1.0.50",
   "scripts": {
-    "test": "bun test test/**/*.ts",
+    "test": "bun test --env-file=.env.test --preload ./test/setup.ts --coverage",
     "dev": "bun run --watch src/index.ts",
     "build": "bun build src/index.ts",
     "format:check": "prettier --check src/**/*.ts",
     "format:fix": "prettier --write .",
-    "prisma:mi": "bunx prisma migrate dev --name init",
-    "prisma:m": "bunx prisma migrate dev",
-    "prisma:g": "bunx prisma generate",
-    "prisma:s": "bunx prisma studio"
+    "drizzle:g": "drizzle-kit generate:pg",
+    "drizzle:m": "drizzle-kit push:pg",
+    "drizzle:s": "bunx drizzle-kit studio"
   },
   "dependencies": {
     "@bogeychan/elysia-logger": "^0.0.17",
     "@elysiajs/eden": "^0.8.1",
     "@elysiajs/swagger": "^0.8.5",
     "@prisma/client": "^5.10.2",
+    "drizzle-orm": "^0.30.1",
     "elysia": "latest",
     "fp-ts": "^2.16.2",
+    "pg": "^8.11.3",
     "pg-mem": "^2.8.1",
     "pino": "^8.19.0",
+    "postgres": "^3.4.3",
     "prettier": "^3.2.5",
     "prisma": "^5.10.2",
+    "ts-node": "^10.9.2",
     "ulid": "^2.3.0"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "@faker-js/faker": "^8.4.1",
+    "@types/pg": "^8.11.2",
+    "bun-types": "latest",
+    "drizzle-kit": "^0.20.14"
   },
   "module": "src/index.js"
 }

@@ -1,7 +1,7 @@
 import { describe, it, expect, jest, mock } from 'bun:test';
 import { TaskEither, right, left } from 'fp-ts/lib/TaskEither';
-import { LogicalError } from '../../src/types/errorTypes';
-import { handleTE } from '../../src/utils/handler';
+import { LogicalError } from '../../../src/types/errorTypes';
+import { handleTE } from '../../../src/utils/handler';
 import { error as elysiaError } from 'elysia';
 
 describe('handleTE', () => {

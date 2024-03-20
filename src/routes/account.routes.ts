@@ -7,16 +7,17 @@ export const accountRoutes = new Elysia({ prefix: '/accounts' })
   .use(accountSetUp)
   .post(
     '',
-    async ({ prisma, accountRepository, accountService, body }) => {
-      return await accountService
-        .create(body, accountRepository, prisma)
-        .then(handleTE)
-        .catch((error) => error);
-    },
+    async ({ client, accountRepository, accountService, body }) =>
+      await client.transaction(async (tx) => {
+        return await accountService
+          .create(body, accountRepository, tx)
+          .then(handleTE)
+          .catch((error) => error);
+      }),
     {
-      body: 'createAccount',
+      body: 'account.create',
       response: {
-        200: 'returnAccount',
+        200: 'account.return',
         400: 'error',
         500: 'error',
       },
