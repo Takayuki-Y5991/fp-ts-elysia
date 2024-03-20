@@ -3,7 +3,7 @@ import { head } from '../../../src/utils/function';
 
 describe('head', () => {
   it('should return the first element of an array', () => {
-    const array: number[] = Array(3).fill([], 1, 3);
+    const array: number[] = [1, 2, 3];
     const actual = head(array);
     expect(actual).toBe(1);
   });

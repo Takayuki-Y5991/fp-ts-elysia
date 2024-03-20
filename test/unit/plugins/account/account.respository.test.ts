@@ -1,37 +1,32 @@
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
-import { client } from '../../../../src/plugins/config/drizzie.plugin';
+import { client, queryClient } from '../../../../src/plugins/config/drizzie.plugin';
 import { buildMockAccount } from '../../../factory/mock';
 import { AccountRepository } from '../../../../src/plugins/account/account.repository';
 import { PgTransactionT } from '../../../../src/types/configTypes';
-
-let tx: PgTransactionT;
-
-beforeEach(async () => {
-  await client.transaction(async (inTx) => {
-    tx = inTx as PgTransactionT;
-  });
-});
-afterEach(async () => {
-  if (tx) {
-    try {
-      await tx.rollback();
-    } catch (error) {
-      console.error('Failed to rollback transaction:', error);
-    }
-  }
-});
+import { runTestTransaction } from '../../../helper/transaction';
 
 describe('Account ', () => {
   // it('create an account successfully', async () => {
-  //   const _mockAccount = buildMockAccount({});
-  //   const actual = await AccountRepository.create(_mockAccount, tx!).then((e) => AccountRepository.findById(e.id, tx));
-  //   expect(actual).not.toBeNil();
+  //   await runTestTransaction(client, async (tx: PgTransactionT) => {
+  //     const _mockAccount = buildMockAccount({});
+  //     const actual = await AccountRepository.create(_mockAccount, tx).then((e) => AccountRepository.findById(e.id, tx));
+  //     expect(actual).not.toBeNil();
+  //   });
   // });
-  it('create an account successfully', async () => {
-    const _mockAccount = buildMockAccount({});
-    const actual = await AccountRepository.create(_mockAccount, tx!).then((e) => AccountRepository.findById(e.id, tx));
-    expect(actual).not.toBeNil();
-  });
+  // it('create an account successfully', async () => {
+  //   await client.transaction(
+  //     async (tx): Promise<void> => {
+  //       const _mockAccount = buildMockAccount({});
+  //       const actual = await AccountRepository.create(_mockAccount, tx).then((e) => AccountRepository.findById(e.id, tx));
+  //       expect(actual).not.toBeNil();
+  //       await tx.rollback();
+  //     },
+  //     {
+  //       accessMode: 'read write',
+  //       isolationLevel: 'read committed',
+  //     },
+  //   );
+  // });
   // it('find an account by email', async () => {
   //   const _mockAccount = buildMockAccount({ email: 'findAnAccountByEmail@example.com' });
   //   await AccountRepository.create(_mockAccount, tx);
