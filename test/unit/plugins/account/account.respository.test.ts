@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test';
-import { client, queryClient } from '../../../../src/plugins/config/drizzie.plugin';
 import { buildMockAccount } from '../../../factory/mock';
 import { AccountRepository } from '../../../../src/plugins/account/account.repository';
 import { PgTransactionT } from '../../../../src/types/configTypes';
 import { runTestTransaction } from '../../../helper/transaction';
+import { client } from '../../../config/drizzle.plugin';
 
 describe('Account ', () => {
   // it('create an account successfully', async () => {
@@ -13,20 +13,20 @@ describe('Account ', () => {
   //     expect(actual).not.toBeNil();
   //   });
   // });
-  // it('create an account successfully', async () => {
-  //   await client.transaction(
-  //     async (tx): Promise<void> => {
-  //       const _mockAccount = buildMockAccount({});
-  //       const actual = await AccountRepository.create(_mockAccount, tx).then((e) => AccountRepository.findById(e.id, tx));
-  //       expect(actual).not.toBeNil();
-  //       await tx.rollback();
-  //     },
-  //     {
-  //       accessMode: 'read write',
-  //       isolationLevel: 'read committed',
-  //     },
-  //   );
-  // });
+  it('create an account successfully', async () => {
+    await client.transaction(
+      async (tx): Promise<void> => {
+        const _mockAccount = buildMockAccount({});
+        const actual = await AccountRepository.create(_mockAccount, tx).then((e) => AccountRepository.findById(e.id, tx));
+        expect(actual).not.toBeNil();
+        tx.rollback();
+      },
+      {
+        accessMode: 'read write',
+        isolationLevel: 'read committed',
+      },
+    );
+  });
   // it('find an account by email', async () => {
   //   const _mockAccount = buildMockAccount({ email: 'findAnAccountByEmail@example.com' });
   //   await AccountRepository.create(_mockAccount, tx);

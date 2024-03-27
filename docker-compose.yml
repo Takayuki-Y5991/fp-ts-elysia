@@ -39,7 +39,7 @@ services:
       POSTGRES_PASSWORD: p@ssw0rd
       POSTGRES_DB: test-project-board
     ports:
-      - '9000:9000'
+      - '5433:5432'
     networks:
       - project-board
 networks:
