@@ -1,6 +1,7 @@
-import { Elysia } from 'elysia';
+import { Elysia, error } from 'elysia';
 import { accountSetUp, globalSetup } from '../setup';
 import { handleTE } from '../utils/handler';
+import { sql } from 'drizzle-orm';
 
 export const accountRoutes = new Elysia({ prefix: '/accounts' })
   .use(globalSetup)
@@ -9,13 +10,7 @@ export const accountRoutes = new Elysia({ prefix: '/accounts' })
     '',
     async ({ client, accountRepository, accountService, body }) =>
       await client.transaction(async (tx) => {
-        return await accountService
-          .create(body, accountRepository, tx)
-          .then(handleTE)
-          .catch(async (error) => {
-            await tx.rollback();
-            error;
-          });
+        return await accountService.create(body, accountRepository, tx).then(handleTE);
       }),
     {
       body: 'account.create',
