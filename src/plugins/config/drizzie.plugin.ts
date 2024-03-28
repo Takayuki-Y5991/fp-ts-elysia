@@ -1,8 +1,9 @@
 import postgres from 'postgres';
-import { PostgresJsDatabase, drizzle } from 'drizzle-orm/postgres-js';
+import { NodePgDatabase, drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from '../../schema';
+import { Pool } from 'pg';
 
-export const queryClient = postgres(Bun.env.DATABASE_URL!);
-export const client = drizzle(queryClient, { logger: true, schema });
+export const pool = new Pool({ connectionString: Bun.env.DATABASE_URL! });
+export const client = drizzle(pool, { logger: true, schema });
 
-export type PostgresDB = PostgresJsDatabase<typeof schema>;
+export type PostgresDB = NodePgDatabase<typeof schema>;

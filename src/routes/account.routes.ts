@@ -12,7 +12,10 @@ export const accountRoutes = new Elysia({ prefix: '/accounts' })
         return await accountService
           .create(body, accountRepository, tx)
           .then(handleTE)
-          .catch((error) => error);
+          .catch(async (error) => {
+            await tx.rollback();
+            error;
+          });
       }),
     {
       body: 'account.create',
