@@ -1,8 +1,8 @@
-import postgres from 'postgres';
-import { PostgresJsDatabase, drizzle } from 'drizzle-orm/postgres-js';
+import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from '../../src/schema';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
+export const pool = new Pool({ connectionString: 'postgresql://test:p@ssw0rd@localhost:5433/test-project-board' });
+export const client = drizzle(pool, { logger: false, schema });
 
-export const queryClient = postgres('postgresql://test:p@ssw0rd@localhost:5433/test-project-board');
-export const client = drizzle(queryClient, { logger: true, schema });
-
-export type PostgresDB = PostgresJsDatabase<typeof schema>;
+export type PostgresDB = NodePgDatabase<typeof schema>;
