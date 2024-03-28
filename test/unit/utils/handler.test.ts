@@ -3,6 +3,7 @@ import { TaskEither, right, left } from 'fp-ts/lib/TaskEither';
 import { LogicalError } from '../../../src/types/errorTypes';
 import { handleTE } from '../../../src/utils/handler';
 import { error as elysiaError } from 'elysia';
+import { wrapErrorMessage } from '../../helper/errors';
 
 describe('handleTE', () => {
   it('should handle successful TaskEither', async () => {
@@ -17,7 +18,7 @@ describe('handleTE', () => {
     try {
       await handleTE(te);
     } catch (receivedError) {
-      expect(receivedError).toEqual(elysiaError('Bad Request', 'Invalid input'));
+      expect(receivedError).toEqual(elysiaError('Bad Request', wrapErrorMessage('Invalid input')));
     }
   });
   it('should handle TaskEither with AUTHENTICATION_ERROR', async () => {
@@ -26,7 +27,7 @@ describe('handleTE', () => {
     try {
       await handleTE(te);
     } catch (receivedError) {
-      expect(receivedError).toEqual(elysiaError('Forbidden', 'This operation is not permitted.'));
+      expect(receivedError).toEqual(elysiaError('Forbidden', wrapErrorMessage('This operation is not permitted.')));
     }
   });
   it('should handle TaskEither with INTERNAL_SERVER_ERROR', async () => {
@@ -35,7 +36,7 @@ describe('handleTE', () => {
     try {
       await handleTE(te);
     } catch (receivedError) {
-      expect(receivedError).toEqual(elysiaError('Internal Server Error', 'Unexpected error.'));
+      expect(receivedError).toEqual(elysiaError('Internal Server Error', wrapErrorMessage('Unexpected error.')));
     }
   });
 });

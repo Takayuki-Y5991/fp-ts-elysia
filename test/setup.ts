@@ -1,18 +1,16 @@
 import { afterAll, beforeAll } from 'bun:test';
-import { migrate } from 'drizzle-orm/postgres-js/migrator';
+import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import path from 'path';
 import { client } from './config/drizzle.plugin';
-import { sql } from 'drizzle-orm';
+import { niceWorkMessage, startMessage } from './config/figlet';
 
 beforeAll(async () => {
-  console.log(':rocket: FINISH - START');
-
-  await client.execute(sql`select now()`);
+  startMessage();
   await migrate(client, { migrationsFolder: path.resolve(__dirname, '../drizzle/migrations') }).catch((e) => {
     console.error('Test Migrate failure! :', e);
     process.exit(1);
   });
 });
 afterAll(async () => {
-  console.log(':rocket: FINISH - TEST');
+  niceWorkMessage();
 });

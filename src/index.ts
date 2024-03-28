@@ -2,6 +2,7 @@ import swagger from '@elysiajs/swagger';
 import { Elysia, t } from 'elysia';
 import { errorHandler, globalSetup } from './setup';
 import { routes } from './routes/index.routes';
+import { serverRunMessage } from './plugins/config/figlet';
 
 export const app = new Elysia()
   .trace(async ({ handle }) => {
@@ -14,4 +15,4 @@ export const app = new Elysia()
   .use(errorHandler)
   .listen(3000);
 
-console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
+serverRunMessage();
