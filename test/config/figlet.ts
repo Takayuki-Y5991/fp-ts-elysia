@@ -1,4 +1,4 @@
-import { greenBright, yellowBright } from 'colorette';
+import { bgYellowBright, greenBright, yellowBright } from 'colorette';
 
 export const startMessage = () => {
   var figlet = require('figlet');
@@ -30,4 +30,8 @@ export const niceWorkMessage = () => {
     ),
   );
   console.log(yellowBright('='.repeat(95)));
+};
+
+export const createDatabaseMessage = () => {
+  console.log(bgYellowBright('Create database for using test'));
 };

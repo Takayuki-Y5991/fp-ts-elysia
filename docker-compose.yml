@@ -10,12 +10,12 @@ services:
     environment:
       - DATABASE_URL=postgresql://api:p@ssw0rd@db:5432/project-board
     volumes:
-      - ./src:/app/src # srcディレクトリの変更をリアルタイムで反映
-      - ./prisma:/app/prisma # prismaディレクトリの変更をリアルタイムで反映
-      - ./package.json:/app/package.json # package.jsonの変更を反映
-      - ./tsconfig.json:/app/tsconfig.json # tsconfig.jsonの変更を反映
-      - ./bun.lockb:/app/bun.lockb # bun.lockbの変更を反映
-      - /app/node_modules # node_modulesディレクトリをコンテナに固定
+      - ./src:/app/src
+      - ./drizzle:/app/drizzle
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./bun.lockb:/app/bun.lockb
+      - /app/node_modules
     networks:
       - project-board
   db:
@@ -29,17 +29,6 @@ services:
       - '5432:5432'
     volumes:
       - ./data:/var/lib/postgresql/data
-    networks:
-      - project-board
-  test-db:
-    image: postgres:16.2-bullseye
-    restart: always
-    environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: p@ssw0rd
-      POSTGRES_DB: test-project-board
-    ports:
-      - '5433:5432'
     networks:
       - project-board
 networks:

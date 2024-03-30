@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm';
 import { head } from '../../utils/function';
 import { CreateAccount } from './account.model';
 
-interface IAccount {
+export interface IAccount {
   id: string;
   name: string;
   email: string;
@@ -13,7 +13,7 @@ interface IAccount {
   createdAt: Date;
   updatedAt: Date;
 }
-interface ICreateAccount {
+export interface ICreateAccount {
   role?: 'admin' | 'customer' | undefined;
   name: string;
   email: string;

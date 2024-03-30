@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'bun:test';
-import { buildMockAccount } from '../../../factory/mock';
+import { buildMockAccount } from '../../../factory/account/mock';
 import { AccountRepository } from '../../../../src/plugins/account/account.repository';
 import { PgTransactionT } from '../../../../src/types/configTypes';
-import { client } from '../../../config/drizzle.plugin';
 import { safeTestTransaction } from '../../../helper/transaction';
+import { DatabaseManager } from '../../../config/drizzle.plugin';
 
-describe('Account ', () => {
+const client = DatabaseManager.getInstance().client;
+
+describe('Account Repository', () => {
   it('create an account successfully', async () => {
     await safeTestTransaction(client, async (tx: PgTransactionT) => {
       const _mockAccount = buildMockAccount({});
