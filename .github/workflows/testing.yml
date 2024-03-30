@@ -26,10 +26,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Docker Compose
-        run: docker-compose -f docker-compose.yml up -d
-
       - uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
@@ -39,6 +35,3 @@ jobs:
 
       - name: Run unit tests
         run: bun run test
-
-      - name: Shutdown Docker Compose
-        run: docker-compose -f docker-compose.yml down
