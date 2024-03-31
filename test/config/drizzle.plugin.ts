@@ -16,7 +16,7 @@ export class DatabaseManager {
 
   private constructor(connection: string) {
     this.pool = new Pool({ connectionString: connection });
-    this.client = drizzle(this.pool, { logger: true, schema });
+    this.client = drizzle(this.pool, { logger: false, schema });
   }
   public static getInstance(connection?: string): DatabaseManager {
     if (!DatabaseManager.instance && connection) {
@@ -27,7 +27,7 @@ export class DatabaseManager {
   public async updateConnection(connection: string) {
     await this.pool.end();
     this.pool = new Pool({ connectionString: connection });
-    this.client = drizzle(this.pool, { logger: true, schema });
+    this.client = drizzle(this.pool, { logger: false, schema });
   }
 }
 

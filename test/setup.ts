@@ -5,7 +5,6 @@ import { niceWorkMessage, startMessage } from './config/figlet';
 import { closeDatabase, globalSetup, setupDatabase } from './config/drizzle.plugin';
 import Elysia from 'elysia';
 import { app } from '../src';
-import { treaty } from '@elysiajs/eden';
 
 beforeAll(async () => {
   startMessage();

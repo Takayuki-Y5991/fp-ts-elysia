@@ -15,7 +15,7 @@ export const buildMockAccount = ({ name, email, password, role }: IMockAccount) 
   return {
     name: name || faker.internet.userName(),
     email: email || faker.internet.email(),
-    password: password || faker.internet.password(),
+    password: password || faker.internet.password({ length: 20 }),
     role: role || 'customer',
   };
 };
