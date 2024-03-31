@@ -1,7 +1,6 @@
 import { Elysia, error } from 'elysia';
-import { accountSetUp, globalSetup } from '../setup';
+import { accountSetUp, errorHandler, globalSetup } from '../setup';
 import { handleTE } from '../utils/handler';
-import { sql } from 'drizzle-orm';
 
 export const accountRoutes = new Elysia({ prefix: '/accounts' })
   .use(globalSetup)

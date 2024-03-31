@@ -1,6 +1,5 @@
 import { describe, expect, it, mock } from 'bun:test';
 import { buildCreatedMockAccount, buildMockAccount } from '../../../factory/account/mock';
-import { IAccountRepository } from '../../../../src/plugins/account/account.repository';
 import { safeTestTransaction } from '../../../helper/transaction';
 import { DatabaseManager } from '../../../config/drizzle.plugin';
 import { PgTransactionT } from '../../../../src/types/configTypes';

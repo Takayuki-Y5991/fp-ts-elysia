@@ -6,8 +6,12 @@ const Error = t.Object({
   }),
 });
 
+const DefaultBadRequest = t.String({
+  description: 'error messages',
+});
+
 export type MError = Static<typeof Error>;
 
 export const error = new Elysia().model({
-  error: Error,
+  error: Error || DefaultBadRequest,
 });

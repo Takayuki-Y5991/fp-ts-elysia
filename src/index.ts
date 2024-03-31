@@ -16,3 +16,5 @@ export const app = new Elysia()
   .listen(3000);
 
 serverRunMessage();
+
+export type App = typeof app;

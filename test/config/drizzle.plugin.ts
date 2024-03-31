@@ -4,6 +4,8 @@ import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
 import { sql } from 'drizzle-orm';
 import { createDatabaseMessage } from './figlet';
+import Elysia from 'elysia';
+import { error } from '../../src/types/model/error.model';
 
 export type PostgresDB = NodePgDatabase<typeof schema>;
 
@@ -48,3 +50,8 @@ const hasDatabase = async (manager: DatabaseManager): Promise<boolean> => {
   const result = await manager.client.execute(sql`SELECT EXISTS (SELECT FROM pg_database WHERE datname = 'test_db')`);
   return result.rows[0].exists as boolean;
 };
+
+export const globalSetup = (client: PostgresDB) =>
+  new Elysia({ name: 'setup' }).use(error).decorate({
+    client: client,
+  });

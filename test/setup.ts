@@ -2,7 +2,10 @@ import { afterAll, beforeAll } from 'bun:test';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import path from 'path';
 import { niceWorkMessage, startMessage } from './config/figlet';
-import { closeDatabase, setupDatabase } from './config/drizzle.plugin';
+import { closeDatabase, globalSetup, setupDatabase } from './config/drizzle.plugin';
+import Elysia from 'elysia';
+import { app } from '../src';
+import { treaty } from '@elysiajs/eden';
 
 beforeAll(async () => {
   startMessage();
@@ -16,3 +19,8 @@ afterAll(async () => {
   await closeDatabase();
   niceWorkMessage();
 });
+
+export const e2eClient = async () => {
+  const client = await setupDatabase();
+  return new Elysia().use(app).use(globalSetup(client));
+};
