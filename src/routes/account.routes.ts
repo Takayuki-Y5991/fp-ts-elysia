@@ -1,5 +1,5 @@
-import { Elysia, error } from 'elysia';
-import { accountSetUp, errorHandler, globalSetup } from '../setup';
+import { Elysia, error as ElysiaError } from 'elysia';
+import { accountSetUp, globalSetup, isFoundError } from '../setup';
 import { handleTE } from '../utils/handler';
 
 export const accountRoutes = new Elysia({ prefix: '/accounts' })
@@ -19,4 +19,8 @@ export const accountRoutes = new Elysia({ prefix: '/accounts' })
         500: 'error',
       },
     },
-  );
+  )
+  .onError(({ code, error }) => {
+    if (code === 'VALIDATION') return ElysiaError('Bad Request', { message: error.message });
+    return isFoundError(error) ? { message: error.value.response } : { message: error.message };
+  });

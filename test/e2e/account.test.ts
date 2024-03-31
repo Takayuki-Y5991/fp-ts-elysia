@@ -18,13 +18,13 @@ describe('Account Routes', () => {
     expect(data?.createdAt).toBeTruthy();
     expect(data?.updatedAt).toBeTruthy();
   });
-  //   it('create an account failure by password short', async () => {
-  //     const _expect = buildMockAccount({
-  //       password: generateRandomString(7),
-  //     });
-  //     const { data, error } = await client.accounts.post(_expect);
-  //     expect(data).toBeNull();
-  //     expect(error?.status).toBe(400);
-  //     expect(error?.value).toBe({ message: 'Password must 8 to 100 count' });
-  //   });
+  it('create an account failure by password short', async () => {
+    const _expect = buildMockAccount({
+      password: generateRandomString(7),
+    });
+    const { data, error } = await client.accounts.post(_expect);
+    expect(data).toBeNull();
+    expect(error?.status).toBe(400);
+    expect(error?.value).toEqual({ message: 'Password must 8 to 100 count' });
+  });
 });

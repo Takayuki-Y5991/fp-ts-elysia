@@ -3,6 +3,7 @@
   "version": "1.0.50",
   "scripts": {
     "test": "bun test --env-file=.env.test --preload ./test/setup.ts --coverage",
+    "test:specific": "bun test --preload ./test/setup.ts --coverage",
     "dev": "bun run --watch src/index.ts",
     "build": "bun build src/index.ts",
     "format:check": "prettier --check src/**/*.ts",
