@@ -2,7 +2,6 @@ import { pipe } from 'fp-ts/lib/function';
 import { ErrorType, LogicalError } from '../types/errorTypes';
 import { TaskEither, match } from 'fp-ts/TaskEither';
 import { error } from 'elysia';
-import { PgTransaction } from 'drizzle-orm/pg-core';
 
 const handleTE = (taskEither: TaskEither<LogicalError, any>): Promise<any> =>
   pipe(

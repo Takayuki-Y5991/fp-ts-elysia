@@ -1,17 +1,9 @@
-import { faker } from '@faker-js/faker';
-
-interface IMockAccount {
-  name?: string;
-  email?: string;
-  password?: string;
-  role?: 'admin' | 'customer';
-}
-
-export const buildMockAccount = ({ name, email, password, role }: IMockAccount) => {
-  return {
-    name: name || faker.internet.userName(),
-    email: email || faker.internet.email(),
-    password: password || faker.internet.password(),
-    role: role || 'customer',
-  };
+export const generateRandomString = (length: number) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 };
