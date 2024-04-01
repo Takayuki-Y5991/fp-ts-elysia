@@ -1,5 +1,5 @@
 import swagger from '@elysiajs/swagger';
-import { Elysia, t } from 'elysia';
+import { Elysia } from 'elysia';
 import { globalSetup } from './setup';
 import { routes } from './routes/index.routes';
 import { serverRunMessage } from './plugins/config/figlet';

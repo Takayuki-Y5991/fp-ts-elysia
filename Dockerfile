@@ -4,15 +4,14 @@ WORKDIR /app
 
 COPY package.json .
 COPY bun.lockb .
+COPY node_modules .
 
 RUN bun install
 
 COPY src src
-COPY prisma prisma
+COPY drizzle drizzle
 COPY tsconfig.json .
 COPY .env .env
-
-RUN bunx prisma generate
 
 CMD ["bun", "src/index.ts"]
 
