@@ -46,8 +46,16 @@ export const verifyPasswordTE = (password: string, user: Account): TaskEither<Lo
     'Password verification failed',
   );
 
+export const findByTokenPayloadTE = (externalId: string, repository: IAccountRepository, tx: PgTransactionT): TaskEither<LogicalError, Account> =>
+  withLoggingAndCatch(() => repository.findById(externalId, tx), 'DATABASE_ERROR', 'Failed to fetch account');
+
 export interface IAccountService {
   create(params: CreateAccount, repository: IAccountRepository, tx: PgTransactionT): Promise<TaskEither<LogicalError, Omit<Account, 'password'>>>;
+  findByAccount(
+    externalId: string | undefined,
+    repository: IAccountRepository,
+    tx: PgTransactionT,
+  ): Promise<TaskEither<LogicalError, Omit<Account, 'password'>>>;
 }
 
 export const AccountService: IAccountService = {
@@ -63,6 +71,16 @@ export const AccountService: IAccountService = {
       ),
       chain(() => hashPasswordTE(params.password)),
       chain((hashedPassword) => createAccountTE({ ...params, password: hashedPassword }, repository, tx)),
+    );
+  },
+  findByAccount: async (
+    externalId: string | undefined,
+    repository: IAccountRepository,
+    tx: PgTransactionT,
+  ): Promise<TaskEither<LogicalError, Omit<Account, 'password'>>> => {
+    return pipe(
+      externalId ? leftTE<LogicalError>({ message: 'authentication error', status: 'AUTHENTICATION_ERROR' }) : rightTE(externalId),
+      chain((params) => findByTokenPayloadTE(params!, repository, tx)),
     );
   },
 };

@@ -27,14 +27,14 @@ interface TokenPayload {
 }
 
 export interface IAuthService {
-  login(authentication: string, client: IGoogleClient, authClient: GoogleOauth): TaskEither<LogicalError, TokenPayload | undefined>;
+  login(authentication: string, client: IGoogleClient, authClient: GoogleOauth): Promise<TaskEither<LogicalError, TokenPayload | undefined>>;
 }
 
 const verifyToken = (token: string, client: IGoogleClient, authClient: GoogleOauth): TaskEither<LogicalError, TokenPayload | undefined> =>
   withLoggingAndCatch(() => client.verifyToken(token, authClient), 'AUTHENTICATION_ERROR', 'Invalid token');
 
 export const AuthService: IAuthService = {
-  login: (token: string, client: IGoogleClient, authClient: GoogleOauth): TaskEither<LogicalError, TokenPayload | undefined> =>
+  login: async (token: string, client: IGoogleClient, authClient: GoogleOauth): Promise<TaskEither<LogicalError, TokenPayload | undefined>> =>
     pipe(
       verifyToken(token, client, authClient),
       chain((tokenPayload) =>
