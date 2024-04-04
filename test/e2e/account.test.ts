@@ -12,6 +12,7 @@ describe('Account Routes', () => {
   it('create an account successfully', async () => {
     const _expect = buildMockAccount({});
     const { data } = await client.accounts.post(_expect);
+    expect(data?.id).toBeTruthy();
     expect(data?.email).toBe(_expect.email);
     expect(data?.name).toBe(_expect.name);
     expect(data?.role).toBe(_expect.role);

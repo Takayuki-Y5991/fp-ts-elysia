@@ -46,20 +46,8 @@ export const verifyPasswordTE = (password: string, user: Account): TaskEither<Lo
     'Password verification failed',
   );
 
-export const generateToken = (account: Account): TaskEither<LogicalError, string> =>
-  withLoggingAndCatch(
-    async () => {
-      // FIXME: TOKEN GENERATE
-      const token = 'AA';
-      return token;
-    },
-    'INTERNAL_SERVER_ERROR',
-    'Failed to generate token',
-  );
-
 export interface IAccountService {
   create(params: CreateAccount, repository: IAccountRepository, tx: PgTransactionT): Promise<TaskEither<LogicalError, Omit<Account, 'password'>>>;
-  login(params: { email: string; password: string }, repository: IAccountRepository, tx: PgTransactionT): Promise<TaskEither<LogicalError, string>>;
 }
 
 export const AccountService: IAccountService = {
@@ -75,19 +63,6 @@ export const AccountService: IAccountService = {
       ),
       chain(() => hashPasswordTE(params.password)),
       chain((hashedPassword) => createAccountTE({ ...params, password: hashedPassword }, repository, tx)),
-    );
-  },
-  login: async (
-    params: { email: string; password: string },
-    repository: IAccountRepository,
-    tx: PgTransactionT,
-  ): Promise<TaskEither<LogicalError, string>> => {
-    return pipe(
-      findByEmailTE(params.email, repository, tx),
-      chain((account) =>
-        account ? verifyPasswordTE(params.password, account) : leftTE<LogicalError>({ message: 'Account not found.', status: 'INVALID_ERROR' }),
-      ),
-      chain((account) => generateToken(account)),
     );
   },
 };

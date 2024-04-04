@@ -1,3 +1,5 @@
+import { OAuth2Client } from 'google-auth-library';
+
 const Priority = {
   LOW: 'low',
   MEDIUM: 'medium',
@@ -5,3 +7,5 @@ const Priority = {
 } as const;
 
 export { Priority };
+
+export type GoogleOauth = OAuth2Client;

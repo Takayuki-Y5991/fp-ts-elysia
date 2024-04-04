@@ -1,20 +1,27 @@
 ```mermaid
-graph LR
+sequenceDiagram
+    participant User as User
+    participant ReactApp as React App
+    participant NodeServer as Node.js Server
+    participant GoogleIdentity as Google Identity Platform
 
-A(ユーザー) --> B(React)
-B(React) --> C(Identity Platform)
-C(Identity Platform) --> D(Java)
-D(Java) --> E(データベース)
-E(データベース) --> D(Java)
-D(Java) --> C(Identity Platform)
-C(Identity Platform) --> B(React)
-B(React) --> A(ユーザー)
-
-A(ユーザー) -- トークン --> B(React)
-B(React) -- 認証情報 --> C(Identity Platform)
-C(Identity Platform) -- ユーザー情報 --> D(Java)
-D(Java) -- 認証結果 --> C(Identity Platform)
-C(Identity Platform) -- 認証結果 --> B(React)
-B(React) -- 認証結果 --> A(ユーザー)
+    alt OAuth Flow with Google
+        User->>ReactApp: Requests to log in with Google
+        ReactApp->>GoogleIdentity: Redirects to Google login
+        GoogleIdentity->>User: Authenticates & grants code
+        User->>ReactApp: Receives code
+        ReactApp->>NodeServer: Sends code
+        NodeServer->>GoogleIdentity: Exchanges code for tokens
+        GoogleIdentity->>NodeServer: Provides tokens
+        NodeServer->>ReactApp: Confirms login
+        ReactApp->>User: Displays login success
+    else Traditional Email & Password
+        User->>ReactApp: Submits email & password
+        ReactApp->>NodeServer: Sends credentials
+        NodeServer->>GoogleIdentity: Verifies credentials
+        GoogleIdentity->>NodeServer: Returns token if valid
+        NodeServer->>ReactApp: Confirms login
+        ReactApp->>User: Displays login success
+    end
 
 ```
