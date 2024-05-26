@@ -10,3 +10,5 @@ export type ResponseType = {
   left?: any;
   right?: any;
 };
+
+export type Optional<T> = T | null;
