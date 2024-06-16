@@ -44,3 +44,5 @@ package-lock.json
 data/
 .logs/
 .vscode
+
+.secret/
