@@ -1,17 +1,14 @@
-import { Account } from '@/domain/models/account.model';
-import { IAccountRepository, rowToMap } from '@/domain/ports/repository/account.repository.port';
-
-import { SAccount, account } from '@/schema';
-import { PgTransactionT } from '@/types/configTypes';
-import { Optional } from '@/types/globalTypes';
-import { head, mapForRow } from '@/utils/function';
+import { Account, CreateAccount } from '@/domain/models/account.model';
+import { IAccountRepository } from '@/domain/ports/repository/account.repository.port';
+import { account } from '@/schema';
+import { PgTransactionT } from '@/types/config.type';
+import { Optional } from '@/types/utility.types';
+import { head } from '@/utils/function';
 import { eq } from 'drizzle-orm/sql';
 
 export const AccountRepository: IAccountRepository = {
-  findExternalId: async (externalId: string, tx: PgTransactionT): Promise<Optional<Account>> =>
-    tx
-      .select()
-      .from(account)
-      .where(eq(account.externalId, externalId))
-      .then((rows: SAccount[]) => mapForRow(head(rows), rowToMap)),
+  findById: async (id: string, tx: PgTransactionT): Promise<Optional<Account>> => tx.select().from(account).where(eq(account.id, id)).then(head),
+  findByExternalId: async (externalId: string, tx: PgTransactionT): Promise<Optional<Account>> =>
+    tx.select().from(account).where(eq(account.externalId, externalId)).then(head),
+  create: async (_account: CreateAccount, tx: PgTransactionT): Promise<Account> => tx.insert(account).values(_account).returning().then(head),
 };

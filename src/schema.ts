@@ -1,4 +1,4 @@
-import { timestamp, pgTable, uuid, varchar, pgEnum } from 'drizzle-orm/pg-core';
+import { pgEnum, pgTable, uuid, varchar } from 'drizzle-orm/pg-core';
 
 export const role = pgEnum('role', ['admin', 'customer']);
 export const provider = pgEnum('provider', ['email', 'github', 'google']);

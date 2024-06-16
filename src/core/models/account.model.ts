@@ -1,4 +1,3 @@
-import { provider } from './../../schema';
 export interface Account {
   id: string;
   externalId: string;
@@ -8,8 +7,4 @@ export interface Account {
   role: 'admin' | 'customer';
 }
 
-export interface CreateAccount {
-  role?: 'admin' | 'customer';
-  name: string;
-  email: string;
-}
+export interface CreateAccount extends Omit<Account, 'id'> {}

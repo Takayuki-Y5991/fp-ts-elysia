@@ -1,10 +1,21 @@
-import { Elysia, t } from 'elysia';
-import { AccountRepository } from './plugins/account/account.repository';
-import { AccountService } from './plugins/account/account.service';
-import { error } from './types/model/error.model';
-import { accountModel } from './plugins/account/account.model';
-import { client } from './plugins/config/drizzie.plugin';
+import { GoogleClient } from '@/adapters/client/google.client';
+import { accountModel } from '@/adapters/models/index.model';
+import { AccountRepository } from '@/adapters/repository/account.repository';
+import { client } from '@/plugins/config/drizzie.plugin';
+import { error } from '@/types/model/error.model';
+import { Elysia } from 'elysia';
+import admin from 'firebase-admin';
 
+/** Authenticate Setup */
+admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.GOOGLE_PROJECT_ID,
+    privateKey: process.env.GOOGLE_PRIVATE_KEY,
+    clientEmail: process.env.GOOGLE_CLIENT_EMAIL,
+  }),
+});
+
+/** App Setup */
 export const globalSetup = new Elysia({ name: 'setup' }).use(error).decorate({
   client: client,
 });
@@ -12,8 +23,8 @@ export const globalSetup = new Elysia({ name: 'setup' }).use(error).decorate({
 export const accountSetUp = new Elysia()
   .use(accountModel)
   .decorate({
-    accountRepository: AccountRepository,
-    accountService: AccountService,
+    accountRepo: AccountRepository,
+    googleClient: GoogleClient(admin.auth()),
   })
   .onError(({ code, error }) => {
     if (code === 'VALIDATION') return { message: error.message };

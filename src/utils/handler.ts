@@ -1,27 +1,27 @@
-import { pipe } from 'fp-ts/lib/function';
-import { ErrorType, LogicalError } from '../types/errorTypes';
-import { TaskEither, match } from 'fp-ts/TaskEither';
-import { error } from 'elysia';
+import { ERROR_MAP } from '@/types/error.type';
+import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
+import { Effect as E } from 'effect';
+import { error as ElysiaError } from 'elysia';
 
-const handleTE = (taskEither: TaskEither<LogicalError, any>): Promise<any> =>
-  pipe(
-    taskEither,
-    match(
-      (left: LogicalError) => Promise.reject(toResponseStatus(left)),
-      (right: any) => Promise.resolve(right),
-    ),
-  )();
-
-const toResponseStatus = ({ status, message }: { status: ErrorType; message: string }) => {
-  switch (status) {
-    case 'INVALID_ERROR':
-      return error('Bad Request', { message: message });
-    case 'AUTHENTICATION_ERROR':
-      return error('Forbidden', { message: message });
-    case 'DATABASE_ERROR':
-    case 'INTERNAL_SERVER_ERROR':
-      return error('Internal Server Error', { message: message });
-  }
+export const handleEffect = async <R>(effect: E.Effect<R, Error, never>): Promise<R> => {
+  return E.runPromise(effect)
+    .then((e) => {
+      return e;
+    })
+    .catch((err) => errorToResponse(err));
 };
 
-export { handleTE };
+const ajv = new Ajv({ removeAdditional: 'all' });
+addFormats(ajv);
+
+export const converter = <T>(result: any, schema: any): E.Effect<T, never, never> => {
+  const validate = ajv.compile(schema);
+  validate(result);
+  return E.succeed(result as T);
+};
+
+const errorToResponse = (error: Error) => {
+  const err = ERROR_MAP.get(error.constructor as new (message: string) => Error);
+  return err ? err(error.message) : ElysiaError('Internal Server Error', { message: error.message });
+};

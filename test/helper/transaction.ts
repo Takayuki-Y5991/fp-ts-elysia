@@ -1,6 +1,6 @@
-import { PostgresDB, client } from '../../src/plugins/config/drizzie.plugin';
+import { PostgresDB } from '../../src/plugins/config/drizzie.plugin';
 import { logger } from '../../src/plugins/config/logger.plugin';
-import { PgTransactionT } from '../../src/types/configTypes';
+import { PgTransactionT } from '../../src/types/config.type';
 
 export const safeTestTransaction = async (client: PostgresDB, fn: any) => {
   try {

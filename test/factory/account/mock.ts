@@ -1,33 +1,22 @@
 import { faker } from '@faker-js/faker';
 
 interface IMockAccount {
-  name?: string;
-  email?: string;
-  password?: string;
-  role?: 'admin' | 'customer';
+  id: string;
+  externalId: string;
+  provider: 'email' | 'github' | 'google';
+  name: string;
+  email: string;
+  role: 'admin' | 'customer';
 }
+interface ArgMockAccount extends Partial<IMockAccount> {}
 
-interface IMockCreatedAccount extends IMockAccount {
-  id?: string;
-}
-
-export const buildMockAccount = ({ name, email, password, role }: IMockAccount) => {
+export const buildMockAccount = ({ id, externalId, provider, name, email, role }: ArgMockAccount): IMockAccount => {
   return {
+    id: id || faker.string.uuid(),
+    externalId: externalId || faker.string.alpha(16),
+    provider: provider || 'email',
     name: name || faker.internet.userName(),
     email: email || faker.internet.email(),
-    password: password || faker.internet.password({ length: 20 }),
     role: role || 'customer',
-  };
-};
-
-export const buildCreatedMockAccount = ({ id, name, email, password, role }: IMockCreatedAccount) => {
-  return {
-    id: id || crypto.randomUUID(),
-    name: name || faker.internet.userName(),
-    email: email || faker.internet.email(),
-    password: password || faker.internet.password(),
-    role: role || 'customer',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   };
 };

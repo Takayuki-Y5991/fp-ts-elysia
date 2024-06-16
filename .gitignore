@@ -25,9 +25,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
 .env.local
+.env.test
 .env.development.local
-.env.test.local
 .env.production.local
 
 # vercel
@@ -46,5 +47,3 @@ data/
 .vscode
 
 .secret/
-.env
-.env.test
