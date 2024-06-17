@@ -1,20 +1,21 @@
+import { certificationHandler } from '@/adapters/handlers/certification.handler';
 import { Elysia, error as ElysiaError } from 'elysia';
 import { accountSetUp, globalSetup, isFoundError } from '../setup';
-import { handleTE } from '../utils/handler';
+import { handleEffect } from '../utils/handler';
 
 export const accountRoutes = new Elysia({ prefix: '/accounts' })
   .use(globalSetup)
   .use(accountSetUp)
   .post(
     '',
-    async ({ client, accountRepository, accountService, body }) =>
+    async ({ client, accountRepo, googleClient }) =>
       await client.transaction(async (tx) => {
-        return await accountService.create(body, accountRepository, tx).then(handleTE);
+        const result = certificationHandler('', { accountRepo, googleClient, tx });
+        return await handleEffect(result);
       }),
     {
-      body: 'account.create',
       response: {
-        200: 'account.return',
+        200: 'certification.return',
         400: 'error',
         500: 'error',
       },

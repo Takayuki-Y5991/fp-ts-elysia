@@ -1,33 +1,19 @@
 {
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "5",
-      "when": 1710590123807,
-      "tag": "0000_simple_zaran",
+      "version": "6",
+      "when": 1716641124005,
+      "tag": "0000_steep_charles_xavier",
       "breakpoints": true
     },
     {
       "idx": 1,
-      "version": "5",
-      "when": 1710721687771,
-      "tag": "0001_minor_sunset_bain",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1710721990615,
-      "tag": "0002_freezing_spot",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1710722116083,
-      "tag": "0003_shallow_karnak",
+      "version": "6",
+      "when": 1716686930738,
+      "tag": "0001_melted_ultimo",
       "breakpoints": true
     }
   ]

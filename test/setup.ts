@@ -1,10 +1,10 @@
 import { afterAll, beforeAll } from 'bun:test';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
-import path from 'path';
-import { niceWorkMessage, startMessage } from './config/figlet';
-import { closeDatabase, globalSetup, setupDatabase } from './config/drizzle.plugin';
 import Elysia from 'elysia';
+import path from 'path';
 import { app } from '../src';
+import { closeDatabase, globalSetup, setupDatabase } from './config/drizzle.plugin';
+import { niceWorkMessage, startMessage } from './config/figlet';
 
 beforeAll(async () => {
   startMessage();

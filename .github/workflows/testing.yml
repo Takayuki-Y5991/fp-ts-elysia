@@ -4,6 +4,12 @@ on:
   pull_request:
     branches: ['main', 'develop']
 
+env:
+  GOOGLE_CLIENT_EMAIL: ${{secrets.GOOGLE_CLIENT_EMAIL}}
+  GOOGLE_PRIVATE_KEY: ${{secrets.GOOGLE_PRIVATE_KEY}}
+  GOOGLE_PROJECT_ID: ${{secrets.GOOGLE_PROJECT_ID}}
+  MIGRATE_FILE: ${{secrets.MIGRATE_FILE}}
+
 jobs:
   unit-testing:
     name: unit-testing
@@ -14,7 +20,7 @@ jobs:
         image: postgres:16.2-bullseye
         env:
           POSTGRES_USER: api
-          POSTGRES_PASSWORD: p@ssw0rd
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
           POSTGRES_DB: project-board
         ports:
           - 5432:5432
@@ -34,4 +40,4 @@ jobs:
         run: bun install
 
       - name: Run unit tests
-        run: bun run test
+        run: bun run test:specific

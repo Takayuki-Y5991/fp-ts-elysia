@@ -3,8 +3,9 @@ import type { Config } from 'drizzle-kit';
 export default {
   schema: './src/schema.ts',
   out: Bun.env.MIGRATE_FILE!,
-  driver: 'pg',
+  dialect: 'postgresql',
   dbCredentials: {
-    connectionString: Bun.env.DATABASE_URL!,
+    url: Bun.env.DATABASE_URL!,
   },
+  strict: true,
 } satisfies Config;

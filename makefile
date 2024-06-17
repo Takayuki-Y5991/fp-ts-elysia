@@ -1,4 +1,4 @@
 .PROXY: build
-build: 
+build:
 	docker-compose build --no-cache
 	

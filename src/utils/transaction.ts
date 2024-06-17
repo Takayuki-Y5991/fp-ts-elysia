@@ -1,6 +1,6 @@
+import { sql } from 'drizzle-orm';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../src/schema';
-import { sql } from 'drizzle-orm';
 
 //  @deprecated
 export type Database = PostgresJsDatabase<typeof schema>;

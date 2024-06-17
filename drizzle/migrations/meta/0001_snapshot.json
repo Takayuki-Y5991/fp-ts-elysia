@@ -1,10 +1,10 @@
 {
-  "id": "4c0b71d7-0784-4a60-be06-4062ae313634",
-  "prevId": "65bedc5b-d87d-4b45-bb67-f924a672286a",
-  "version": "5",
-  "dialect": "pg",
+  "id": "181896b3-a92f-4d54-bd88-3614c69c9846",
+  "prevId": "40dbdb58-eba6-4422-8786-8eabfd22b90a",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "account": {
+    "public.account": {
       "name": "account",
       "schema": "",
       "columns": {
@@ -14,6 +14,19 @@
           "primaryKey": true,
           "notNull": true,
           "default": "gen_random_uuid()"
+        },
+        "externalId": {
+          "name": "externalId",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "provider": {
+          "name": "provider",
+          "type": "provider",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -27,32 +40,13 @@
           "primaryKey": false,
           "notNull": true
         },
-        "password": {
-          "name": "password",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
         "role": {
           "name": "role",
           "type": "role",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'customer'"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'2024-03-18 00:28:07.761'"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'2024-03-18 00:28:07.761'"
         }
       },
       "indexes": {},
@@ -70,12 +64,22 @@
     }
   },
   "enums": {
-    "role": {
+    "public.provider": {
+      "name": "provider",
+      "schema": "public",
+      "values": [
+        "email",
+        "github",
+        "google"
+      ]
+    },
+    "public.role": {
       "name": "role",
-      "values": {
-        "admin": "admin",
-        "customer": "customer"
-      }
+      "schema": "public",
+      "values": [
+        "admin",
+        "customer"
+      ]
     }
   },
   "schemas": {},
