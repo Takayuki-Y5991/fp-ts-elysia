@@ -1,11 +1,10 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
-import * as schema from '../../src/schema';
-import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
+import * as schema from '@/schema';
+import { error } from '@/types/model/error.model';
 import { sql } from 'drizzle-orm';
-import { createDatabaseMessage } from './figlet';
+import { NodePgDatabase, drizzle } from 'drizzle-orm/node-postgres';
 import Elysia from 'elysia';
-import { error } from '../../src/types/model/error.model';
+import { Pool } from 'pg';
+import { createDatabaseMessage } from './figlet';
 
 export type PostgresDB = NodePgDatabase<typeof schema>;
 

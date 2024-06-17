@@ -9,9 +9,9 @@ import admin from 'firebase-admin';
 /** Authenticate Setup */
 admin.initializeApp({
   credential: admin.credential.cert({
-    projectId: process.env.GOOGLE_PROJECT_ID,
-    privateKey: process.env.GOOGLE_PRIVATE_KEY,
-    clientEmail: process.env.GOOGLE_CLIENT_EMAIL,
+    projectId: Bun.env.GOOGLE_PROJECT_ID,
+    privateKey: Bun.env.GOOGLE_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+    clientEmail: Bun.env.GOOGLE_CLIENT_EMAIL,
   }),
 });
 
