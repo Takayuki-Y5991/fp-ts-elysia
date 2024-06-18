@@ -7,15 +7,14 @@ services:
       - db
     ports:
       - '3000:3000'
+    env_file:
+      - .env
     environment:
       - DATABASE_URL=postgresql://api:p@ssw0rd@db:5432/project-board
     volumes:
       - ./src:/app/src
       - ./drizzle:/app/drizzle
-      - ./package.json:/app/package.json
       - ./tsconfig.json:/app/tsconfig.json
-      - ./bun.lockb:/app/bun.lockb
-      - /app/node_modules
     networks:
       - project-board
   db:
