@@ -1,0 +1,43 @@
+name: testing
+
+on:
+  pull_request:
+    branches: ['main', 'develop']
+
+env:
+  GOOGLE_CLIENT_EMAIL: ${{secrets.GOOGLE_CLIENT_EMAIL}}
+  GOOGLE_PRIVATE_KEY: ${{secrets.GOOGLE_PRIVATE_KEY}}
+  GOOGLE_PROJECT_ID: ${{secrets.GOOGLE_PROJECT_ID}}
+  MIGRATE_FILE: ${{secrets.MIGRATE_FILE}}
+
+jobs:
+  unit-testing:
+    name: unit-testing
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16.2-bullseye
+        env:
+          POSTGRES_USER: api
+          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
+          POSTGRES_DB: project-board
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run unit tests
+        run: bun run test:specific

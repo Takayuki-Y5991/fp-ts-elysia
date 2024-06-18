@@ -1,5 +1,23 @@
 version: '3.8'
 services:
+  app:
+    build:
+      context: .
+    depends_on:
+      - db
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=postgresql://api:p@ssw0rd@db:5432/project-board
+    volumes:
+      - ./src:/app/src
+      - ./drizzle:/app/drizzle
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./bun.lockb:/app/bun.lockb
+      - /app/node_modules
+    networks:
+      - project-board
   db:
     image: postgres:16.2-bullseye
     restart: always
@@ -11,3 +29,8 @@ services:
       - '5432:5432'
     volumes:
       - ./data:/var/lib/postgresql/data
+    networks:
+      - project-board
+networks:
+  project-board:
+    driver: bridge
