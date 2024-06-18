@@ -1,5 +1,5 @@
-import { Account, CreateAccount } from '@/domain/models/account.model';
-import { IAccountRepository } from '@/domain/ports/repository/account.repository.port';
+import { Account, CreateAccount } from '@/core/models/account.model';
+import { IAccountRepository } from '@/core/ports/repository/account.repository.port';
 import { account } from '@/schema';
 import { PgTransactionT } from '@/types/config.type';
 import { Optional } from '@/types/utility.types';

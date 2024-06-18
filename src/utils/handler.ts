@@ -15,9 +15,9 @@ export const handleEffect = async <R>(effect: E.Effect<R, Error, never>): Promis
 const ajv = new Ajv({ removeAdditional: 'all' });
 addFormats(ajv);
 
-export const converter = <T>(result: any, schema: any): E.Effect<T, never, never> => {
+export const converter = <T>(result: any, schema: any): E.Effect<T, Error, never> => {
   const validate = ajv.compile(schema);
-  validate(result);
+  if (!validate(result)) return E.fail(new Error(`failure convert: ${schema}`));
   return E.succeed(result as T);
 };
 
