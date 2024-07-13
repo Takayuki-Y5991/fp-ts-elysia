@@ -1,5 +1,6 @@
 import { Elysia } from 'elysia';
-import { accountRoutes } from './account.routes';
-import { globalRoutes } from './global.routes';
 
-export const routes = new Elysia().use(globalRoutes).use(accountRoutes);
+import { certificationRoutes } from '@/routes/certification.routes';
+import { globalRoutes } from '@/routes/global.routes';
+
+export const routes = new Elysia().use(globalRoutes).use(certificationRoutes);
