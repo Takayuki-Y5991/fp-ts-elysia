@@ -8,4 +8,4 @@ import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 export type PgTransactionT = PgTransaction<NodePgQueryResultHKT, typeof schema, ExtractTablesWithRelations<typeof schema>>;
 
 export type AuthT = admin.auth.Auth;
-export type LoginTicketT = DecodedIdToken;
+export interface LoginTicketT extends DecodedIdToken {}

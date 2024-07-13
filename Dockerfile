@@ -1,5 +1,5 @@
 # Stage 1 : Install dependencies
-FROM oven/bun as dependencies
+FROM oven/bun:latest as dependencies
 
 WORKDIR /app
 COPY package.json .
@@ -8,7 +8,7 @@ RUN bun install
 RUN bun install firebase-admin
 
 # Stage 2 : Copy application code
-FROM oven/bun
+FROM oven/bun:latest
 
 WORKDIR /app
 COPY --from=dependencies /app/node_modules ./node_modules
