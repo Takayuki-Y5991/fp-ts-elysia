@@ -1,13 +1,17 @@
-FROM oven/bun
+# Stage 1 : Install dependencies
+FROM oven/bun:latest as dependencies
 
 WORKDIR /app
-
 COPY package.json .
 COPY bun.lockb .
-COPY node_modules .
-
 RUN bun install
+RUN bun install firebase-admin
 
+# Stage 2 : Copy application code
+FROM oven/bun:latest
+
+WORKDIR /app
+COPY --from=dependencies /app/node_modules ./node_modules
 COPY src src
 COPY drizzle drizzle
 COPY tsconfig.json .

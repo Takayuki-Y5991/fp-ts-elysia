@@ -5,6 +5,7 @@ import { client } from '@/plugins/config/drizzie.plugin';
 import { error } from '@/types/model/error.model';
 import { Elysia } from 'elysia';
 import admin from 'firebase-admin';
+import { certificationPlugin } from './plugins/certification.plugin';
 
 /** Authenticate Setup */
 admin.initializeApp({
@@ -20,16 +21,30 @@ export const globalSetup = new Elysia({ name: 'setup' }).use(error).decorate({
   client: client,
 });
 
-export const accountSetUp = new Elysia()
+// export const accountSetUp = new Elysia()
+//   .use(accountModel)
+//   .decorate({
+//     accountRepo: AccountRepository,
+//     googleClient: GoogleClient(admin.auth()),
+//   })
+//   .onError(({ code, error }) => {
+//     if (code === 'VALIDATION') return { message: error.message };
+//     return isFoundError(error) ? { message: error.value.response } : { message: error.message };
+//   });
+
+export const certificationSetup = new Elysia()
   .use(accountModel)
+  .use(certificationPlugin)
   .decorate({
     accountRepo: AccountRepository,
     googleClient: GoogleClient(admin.auth()),
   })
+
   .onError(({ code, error }) => {
     if (code === 'VALIDATION') return { message: error.message };
     return isFoundError(error) ? { message: error.value.response } : { message: error.message };
   });
+
 export const isFoundError = (error: any): error is { value: { response: any } } => {
   return 'value' in error && 'response' in error['value'];
 };

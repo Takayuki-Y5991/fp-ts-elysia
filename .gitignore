@@ -47,3 +47,4 @@ data/
 .vscode
 
 .secret/
+.idea/

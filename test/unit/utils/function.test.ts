@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test';
-import { head } from '../../../src/utils/function';
+import { head, ifPresent } from '../../../src/utils/function';
 
 describe('head', () => {
   it('should return the first element of an array', () => {
@@ -11,5 +11,16 @@ describe('head', () => {
     const array: number[] = [];
     const actual = head(array);
     expect(actual).toBeUndefined();
+  });
+});
+
+describe('ifPresent', () => {
+  it('should return true', () => {
+    const actual = ifPresent({ fn: 'ifPresent' });
+    expect(actual).toBeTruthy();
+  });
+  it('should return false', () => {
+    const actual = ifPresent(undefined);
+    expect(actual).toBeFalsy();
   });
 });

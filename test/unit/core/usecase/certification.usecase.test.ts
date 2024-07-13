@@ -1,15 +1,14 @@
+import { GoogleClient } from '@/adapters/client/google.client';
+import { AccountRepository } from '@/adapters/repository/account.repository';
 import { IGoogleClient } from '@/core/ports/client/google.client.port';
 import { IAccountRepository } from '@/core/ports/repository/account.repository.port';
 import { certification } from '@/core/usecase/certification.usecase';
-import { faker } from '@faker-js/faker';
-import admin from 'firebase-admin';
-
-import { GoogleClient } from '@/adapters/client/google.client';
-import { AccountRepository } from '@/adapters/repository/account.repository';
 import { InvalidParameterError } from '@/types/error.type';
+import { faker } from '@faker-js/faker';
 import { beforeEach, describe, expect, it, spyOn } from 'bun:test';
 import { Effect as E } from 'effect';
 import { InternalServerError } from 'elysia';
+import admin from 'firebase-admin';
 import { LoginTicketT, PgTransactionT } from '../../../../src/types/config.type';
 import { buildMockAccount } from '../../../factory/account/mock';
 
